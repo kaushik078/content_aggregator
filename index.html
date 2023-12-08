@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News</title>
+</head>
+<body>
+
+<div id="news-container"></div>
+
+<script>
+// Replace 'YOUR_API_KEY' with your actual News API key
+const apiKey = '66d3e7b9871f482a87337031171d2c8d';
+const apiUrl = 'https://newsapi.org/v2/top-headlines';
+const country = 'in'; // Replace with your country code, e.g., 'us', 'gb', 'in'
+
+// Function to fetch news data from the API
+async function fetchNews() {
+    try {
+        const response = await fetch(`${apiUrl}?country=${country}&apiKey=${apiKey}`);
+        const data = await response.json();
+
+        // Check if the request was successful
+        if (data.status === 'ok') {
+            displayNews(data.articles);
+        } else {
+            console.error('Error fetching news:', data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching news:', error);
+    }
+}
+
+// Function to display news on the webpage
+function displayNews(articles) {
+    const newsContainer = document.getElementById('news-container');
+
+    // Create HTML elements for each news article
+    const newsItems = articles.map(article => {
+        return `
+            <div>
+                <h3>${article.title}</h3>
+                <p>${article.description}</p>
+                <p>Source: ${article.source.name}</p>
+                <a href="${article.url}" target="_blank">Read more</a>
+            </div>
+        `;
+    });
+
+    // Set the innerHTML of the news container with the generated HTML
+    newsContainer.innerHTML = newsItems.join('');
+}
+
+// Call the fetchNews function to get and display the latest news
+fetchNews();
+</script>
+
+</body>
+</html>
